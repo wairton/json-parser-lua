@@ -1,0 +1,10 @@
+local M = {
+    WHITESPACE='WHITESPACE',
+    STRING='STRING',
+    OBJECT='OBJECT',
+    VALUE='VALUE',
+    ARRAY='ARRAY',
+    NUMBER='NUMBER'
+}
+
+return M
