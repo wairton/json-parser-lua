@@ -9,11 +9,11 @@ function M.load(filename)
 end
 
 
-whitespace_set = { 
+whitespace_set = {
     [" "]=1,
     ["\n"]=1,
     ["\t"]=1,
-    ["\r"]=1 
+    ["\r"]=1
 }
 
 function M.read_whitespace(content, start)
@@ -50,11 +50,11 @@ function M.read_number(content, start)
 end
 
 
-function read_string(content, start)
+function M.read_string(content, start)
     local buffer = ""
     local i = start + 1
-    local valid = false
-    
+    local valid = true
+
     while i < #content do
         local c = content:sub(i, i)
         if c == '"' then
@@ -65,7 +65,7 @@ function read_string(content, start)
     end
 
     if valid then
-        return buffer, i
+        return {t=symbols.STRING, v=buffer, c={}},  #buffer
     end
     return nil, nil
 end
@@ -108,10 +108,10 @@ function M.read_array(content, start)
                 return nil, nil
             end
         else
-            return nil, nil 
+            return nil, nil
         end
     end
-    return nil, nil 
+    return nil, nil
 end
 
 
@@ -131,11 +131,11 @@ function M.parse_content(content, i)
         if c == '{' then
             node, offset = read_object(content, c)
         elseif c == '[' then
-            node, offset = read_array(content, c)
+            node, offset = M.read_array(content, i)
+            ast = node
         elseif c == '"' then
-            node, offset = read_string(content, c)
+            node, offset = M.read_string(content, c)
         end
-        print(c == '\n')
         i = i + 1
     end
     return ast
